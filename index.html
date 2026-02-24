@@ -1,15 +1,740 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio</title>
-    <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Chinazaekpere Loveday Akunna — Product Manager</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --navy: #0B1628;
+    --navy2: #0f1e35;
+    --blue: #1A4FAF;
+    --accent: #3B82F6;
+    --gold: #F59E0B;
+    --gold2: #FCD34D;
+    --white: #F8FAFF;
+    --gray: #8B9BB4;
+    --card: rgba(255,255,255,0.04);
+    --border: rgba(255,255,255,0.08);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { background:var(--navy); color:var(--white); font-family:'DM Sans',sans-serif; overflow-x:hidden; }
+
+  body::before {
+    content:''; position:fixed; inset:0; pointer-events:none; z-index:0;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    opacity:.5;
+  }
+
+  /* LANG TOGGLE */
+  #lang-toggle {
+    position:fixed; top:20px; right:20px; z-index:1000;
+    display:flex; background:rgba(255,255,255,0.06);
+    border:1px solid var(--border); border-radius:100px;
+    backdrop-filter:blur(16px); overflow:hidden;
+  }
+  .lang-btn {
+    padding:8px 22px; font-family:'Syne',sans-serif; font-size:12px;
+    font-weight:700; letter-spacing:.1em; background:transparent;
+    border:none; color:var(--gray); cursor:pointer; transition:all .3s; text-transform:uppercase;
+  }
+  .lang-btn.active { background:var(--gold); color:var(--navy); border-radius:100px; }
+
+  /* NAV */
+  nav {
+    position:fixed; top:20px; left:50%; transform:translateX(-50%);
+    z-index:999; display:flex; gap:2px;
+    background:rgba(11,22,40,0.85); border:1px solid var(--border);
+    padding:5px; border-radius:100px; backdrop-filter:blur(20px);
+  }
+  nav a {
+    padding:8px 18px; border-radius:100px; font-family:'Syne',sans-serif;
+    font-size:12px; font-weight:600; letter-spacing:.06em;
+    text-decoration:none; color:var(--gray); transition:all .3s; text-transform:uppercase;
+  }
+  nav a:hover, nav a.active { color:var(--white); background:rgba(255,255,255,0.08); }
+
+  /* HERO */
+  #about {
+    min-height:100vh; display:flex; align-items:center;
+    padding:120px 7vw 80px; position:relative; overflow:hidden;
+  }
+  .hero-grid {
+    position:absolute; inset:0; z-index:0;
+    background-image:
+      linear-gradient(rgba(59,130,246,.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(59,130,246,.05) 1px, transparent 1px);
+    background-size:64px 64px;
+    mask-image:radial-gradient(ellipse 70% 80% at 65% 40%, black 20%, transparent 75%);
+  }
+  .orb {
+    position:absolute; border-radius:50%; filter:blur(90px); pointer-events:none;
+  }
+  .orb1 { width:700px; height:700px; right:-150px; top:-150px; background:radial-gradient(circle, rgba(26,79,175,.25) 0%, transparent 65%); }
+  .orb2 { width:450px; height:450px; left:15%; bottom:-80px; background:radial-gradient(circle, rgba(245,158,11,.1) 0%, transparent 65%); }
+
+  .hero-content { position:relative; z-index:1; max-width:800px; }
+
+  .hero-badge {
+    display:inline-flex; align-items:center; gap:10px;
+    background:rgba(245,158,11,.1); border:1px solid rgba(245,158,11,.3);
+    color:var(--gold); padding:7px 18px; border-radius:100px;
+    font-size:12px; font-weight:600; letter-spacing:.08em; text-transform:uppercase;
+    margin-bottom:36px; animation:fadeUp .7s ease both;
+  }
+  .badge-dot {
+    width:7px; height:7px; border-radius:50%; background:var(--gold);
+    animation:glow 2s infinite;
+  }
+  @keyframes glow { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(1.4)} }
+
+  h1.name {
+    font-family:'Syne',sans-serif;
+    font-size:clamp(50px,8.5vw,105px);
+    font-weight:800; line-height:.92; letter-spacing:-.035em;
+    animation:fadeUp .7s .08s ease both;
+  }
+  .name-white { display:block; color:var(--white); }
+  .name-grad {
+    display:block;
+    background:linear-gradient(120deg, var(--accent) 0%, var(--gold) 100%);
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  }
+
+  .hero-role {
+    margin-top:22px; font-size:17px; color:var(--gray); font-weight:300;
+    letter-spacing:.05em; animation:fadeUp .7s .16s ease both;
+  }
+  .role-dot { color:var(--accent); margin:0 10px; }
+
+  .hero-bio {
+    margin-top:22px; font-size:16px; line-height:1.8;
+    color:rgba(248,250,255,.65); max-width:580px;
+    animation:fadeUp .7s .24s ease both;
+  }
+
+  .stats-row {
+    display:flex; gap:52px; margin-top:52px;
+    animation:fadeUp .7s .32s ease both;
+    padding-top:40px; border-top:1px solid var(--border);
+  }
+  .stat-val {
+    font-family:'Syne',sans-serif; font-size:40px; font-weight:800; line-height:1;
+    background:linear-gradient(120deg, #fff, var(--accent));
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  }
+  .stat-lbl { font-size:12px; color:var(--gray); text-transform:uppercase; letter-spacing:.09em; margin-top:4px; }
+
+  .cta-row {
+    display:flex; gap:14px; margin-top:44px;
+    animation:fadeUp .7s .4s ease both;
+  }
+  .btn-g {
+    padding:14px 34px; background:var(--gold); color:var(--navy);
+    border:none; border-radius:100px; font-family:'Syne',sans-serif;
+    font-size:13px; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
+    cursor:pointer; text-decoration:none; transition:all .3s;
+    display:inline-flex; align-items:center; gap:8px;
+  }
+  .btn-g:hover { transform:translateY(-3px); box-shadow:0 14px 44px rgba(245,158,11,.45); }
+  .btn-o {
+    padding:14px 34px; background:transparent; color:var(--white);
+    border:1px solid var(--border); border-radius:100px;
+    font-family:'Syne',sans-serif; font-size:13px; font-weight:700;
+    letter-spacing:.06em; text-transform:uppercase; cursor:pointer;
+    text-decoration:none; transition:all .3s; display:inline-flex; align-items:center; gap:8px;
+  }
+  .btn-o:hover { border-color:rgba(255,255,255,.25); background:rgba(255,255,255,.05); }
+
+  /* AVATAR */
+  .hero-avatar {
+    position:absolute; right:7vw; top:50%; transform:translateY(-50%);
+    width:340px; height:400px; z-index:1;
+    animation:fadeUp .7s .16s ease both;
+  }
+  .avatar-box {
+    width:100%; height:100%;
+    background:linear-gradient(145deg, rgba(26,79,175,.18), rgba(245,158,11,.08));
+    border:1px solid var(--border); border-radius:28px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:14px; backdrop-filter:blur(10px); position:relative; overflow:hidden;
+  }
+  .avatar-box::before {
+    content:''; position:absolute; inset:0;
+    background:linear-gradient(135deg, rgba(59,130,246,.08) 0%, transparent 55%);
+  }
+  .avatar-box img {
+    width:100%; height:100%; object-fit:cover; border-radius:28px; position:absolute; inset:0;
+  }
+  .avatar-initials {
+    font-family:'Syne',sans-serif; font-size:68px; font-weight:800; line-height:1;
+    background:linear-gradient(120deg, var(--accent), var(--gold));
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+    position:relative; z-index:1;
+  }
+  .avatar-sub { font-size:12px; color:var(--gray); position:relative; z-index:1; text-align:center; padding:0 20px; }
+  .corner { position:absolute; width:52px; height:52px; border:2px solid var(--gold); opacity:.35; }
+  .corner.tl { top:14px; left:14px; border-right:none; border-bottom:none; border-radius:6px 0 0 0; }
+  .corner.br { bottom:14px; right:14px; border-left:none; border-top:none; border-radius:0 0 6px 0; }
+
+  /* SECTIONS */
+  section { padding:96px 7vw; position:relative; }
+  #skills, #projects, #certifications { background:var(--navy2); }
+
+  .s-label {
+    display:inline-flex; align-items:center; gap:12px;
+    font-family:'Syne',sans-serif; font-size:11px; font-weight:700;
+    letter-spacing:.2em; text-transform:uppercase; color:var(--gold); margin-bottom:14px;
+  }
+  .s-label::before { content:''; width:28px; height:2px; background:var(--gold); }
+
+  h2.s-title {
+    font-family:'Syne',sans-serif; font-size:clamp(34px,5vw,58px);
+    font-weight:800; line-height:1.05; letter-spacing:-.025em; margin-bottom:56px;
+  }
+  h2.s-title span {
+    background:linear-gradient(120deg, var(--accent), var(--gold));
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  }
+
+  /* SKILLS */
+  .skills-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(270px,1fr)); gap:22px; }
+  .skill-card {
+    background:var(--card); border:1px solid var(--border); border-radius:20px;
+    padding:30px; transition:all .35s; position:relative; overflow:hidden;
+  }
+  .skill-card::after {
+    content:''; position:absolute; top:0; left:0; right:0; height:2px;
+    background:linear-gradient(90deg, var(--accent), var(--gold));
+    transform:scaleX(0); transform-origin:left; transition:transform .4s;
+  }
+  .skill-card:hover::after { transform:scaleX(1); }
+  .skill-card:hover { border-color:rgba(255,255,255,.14); transform:translateY(-5px); }
+  .sk-icon { font-size:30px; margin-bottom:14px; }
+  .sk-name { font-family:'Syne',sans-serif; font-size:17px; font-weight:700; margin-bottom:14px; }
+  .sk-tags { display:flex; flex-wrap:wrap; gap:7px; }
+  .sk-tag {
+    padding:4px 11px; background:rgba(59,130,246,.1);
+    border:1px solid rgba(59,130,246,.2); border-radius:100px;
+    font-size:11px; color:rgba(248,250,255,.7);
+  }
+
+  /* EXPERIENCE */
+  .timeline { position:relative; }
+  .timeline::before {
+    content:''; position:absolute; left:18px; top:8px; bottom:0;
+    width:1px; background:linear-gradient(to bottom, var(--accent), transparent);
+  }
+  .exp-item {
+    padding-left:60px; margin-bottom:60px; position:relative;
+    opacity:0; transform:translateX(-16px); transition:all .55s ease;
+  }
+  .exp-item.visible { opacity:1; transform:translateX(0); }
+  .exp-dot {
+    position:absolute; left:10px; top:4px;
+    width:18px; height:18px; border-radius:50%;
+    background:var(--navy); border:2px solid var(--accent); z-index:1;
+  }
+  .exp-dot.now { background:var(--gold); border-color:var(--gold); box-shadow:0 0 18px rgba(245,158,11,.55); }
+  .exp-date { font-size:12px; color:var(--gold); font-weight:600; letter-spacing:.07em; text-transform:uppercase; margin-bottom:8px; }
+  .exp-role { font-family:'Syne',sans-serif; font-size:21px; font-weight:700; margin-bottom:4px; }
+  .exp-co { font-size:14px; color:var(--accent); margin-bottom:18px; font-weight:500; }
+  .exp-txt { font-size:15px; color:rgba(248,250,255,.62); line-height:1.82; margin-bottom:16px; }
+  .wins { display:flex; flex-wrap:wrap; gap:9px; }
+  .win {
+    padding:5px 13px; background:rgba(245,158,11,.1);
+    border:1px solid rgba(245,158,11,.25); border-radius:100px;
+    font-size:12px; color:var(--gold2); font-weight:500;
+  }
+
+  /* PROJECTS */
+  .proj-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:26px; }
+  .proj-card {
+    background:var(--card); border:1px solid var(--border); border-radius:24px;
+    padding:34px; transition:all .4s; position:relative; overflow:hidden;
+  }
+  .proj-card::after {
+    content:''; position:absolute; inset:0; opacity:0;
+    background:linear-gradient(135deg, rgba(59,130,246,.07), rgba(245,158,11,.04));
+    transition:opacity .4s;
+  }
+  .proj-card:hover { transform:translateY(-7px); border-color:rgba(59,130,246,.3); }
+  .proj-card:hover::after { opacity:1; }
+  .proj-num {
+    font-family:'Syne',sans-serif; font-size:54px; font-weight:800;
+    color:rgba(59,130,246,.1); line-height:1; margin-bottom:14px; letter-spacing:-.04em;
+  }
+  .proj-title { font-family:'Syne',sans-serif; font-size:19px; font-weight:700; margin-bottom:10px; position:relative; z-index:1; }
+  .proj-desc { font-size:14px; color:rgba(248,250,255,.58); line-height:1.78; margin-bottom:18px; position:relative; z-index:1; }
+  .proj-tag {
+    display:inline-flex; align-items:center; gap:6px;
+    padding:6px 14px; background:rgba(59,130,246,.12);
+    border:1px solid rgba(59,130,246,.25); border-radius:100px;
+    font-size:12px; color:var(--accent); font-weight:600; position:relative; z-index:1;
+  }
+
+  /* CERTS */
+  .certs-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(290px,1fr)); gap:18px; margin-bottom:56px; }
+  .cert-card {
+    background:var(--card); border:1px solid var(--border); border-radius:16px;
+    padding:22px 26px; display:flex; align-items:flex-start; gap:18px; transition:all .3s;
+  }
+  .cert-card:hover { border-color:rgba(245,158,11,.3); transform:translateY(-2px); }
+  .cert-icon {
+    width:42px; height:42px; border-radius:12px; flex-shrink:0;
+    background:linear-gradient(135deg, rgba(245,158,11,.18), rgba(59,130,246,.1));
+    display:flex; align-items:center; justify-content:center; font-size:19px;
+  }
+  .cert-name { font-family:'Syne',sans-serif; font-size:14px; font-weight:700; margin-bottom:3px; }
+  .cert-issuer { font-size:12px; color:var(--accent); margin-bottom:2px; }
+  .cert-date { font-size:11px; color:var(--gray); }
+
+  /* EDU */
+  .edu-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:22px; margin-top:22px; }
+  .edu-card {
+    background:var(--card); border:1px solid var(--border); border-radius:20px;
+    padding:30px; position:relative; overflow:hidden;
+  }
+  .edu-card::before {
+    content:''; position:absolute; bottom:-20px; right:-20px;
+    width:120px; height:120px;
+    background:radial-gradient(circle, rgba(59,130,246,.1), transparent);
+    border-radius:50%;
+  }
+  .edu-yr { font-size:12px; color:var(--gold); font-weight:600; letter-spacing:.08em; margin-bottom:10px; }
+  .edu-deg { font-family:'Syne',sans-serif; font-size:17px; font-weight:700; margin-bottom:8px; }
+  .edu-sch { font-size:13px; color:var(--accent); }
+
+  /* CONTACT */
+  #contact { text-align:center; }
+  .contact-inner { max-width:620px; margin:0 auto; }
+  .contact-links { display:flex; justify-content:center; gap:14px; margin-top:38px; flex-wrap:wrap; }
+  .contact-link {
+    display:flex; align-items:center; gap:9px;
+    padding:13px 26px; background:var(--card); border:1px solid var(--border);
+    border-radius:100px; color:var(--white); text-decoration:none;
+    font-size:14px; font-weight:500; transition:all .3s;
+  }
+  .contact-link:hover { border-color:var(--gold); color:var(--gold); transform:translateY(-2px); }
+
+  /* FOOTER */
+  footer {
+    padding:28px 7vw; border-top:1px solid var(--border);
+    display:flex; justify-content:space-between; align-items:center;
+    font-size:12px; color:var(--gray);
+  }
+
+  /* ANIM */
+  @keyframes fadeUp { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:translateY(0)} }
+
+  /* RESPONSIVE */
+  @media(max-width:920px){
+    .hero-avatar{display:none;}
+    h1.name{font-size:clamp(42px,11vw,72px);}
+    .stats-row{gap:28px;}
+    nav{display:none;}
+  }
+  @media(max-width:500px){
+    .stats-row{flex-wrap:wrap; gap:24px;}
+    .cta-row{flex-direction:column;}
+  }
+
+  /* LANG */
+  body.pt [data-en]{display:none!important;}
+  body.en [data-pt]{display:none!important;}
+</style>
 </head>
-<body>
-    <div class="avatar-box">
-        <img src="profile-photo.jpg" alt="Chinazaekpere Akunna"/>
+<body class="en">
+
+<div id="lang-toggle">
+  <button class="lang-btn active" onclick="setLang('en')" id="btn-en">EN</button>
+  <button class="lang-btn" onclick="setLang('pt')" id="btn-pt">PT</button>
+</div>
+
+<nav>
+  <a data-en href="#about">About</a><a data-pt href="#about">Sobre</a>
+  <a data-en href="#skills">Skills</a><a data-pt href="#skills">Skills</a>
+  <a data-en href="#experience">Experience</a><a data-pt href="#experience">Experiência</a>
+  <a data-en href="#projects">Projects</a><a data-pt href="#projects">Projetos</a>
+  <a data-en href="#certifications">Certs</a><a data-pt href="#certifications">Certs</a>
+  <a data-en href="#contact">Contact</a><a data-pt href="#contact">Contato</a>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section id="about">
+  <div class="hero-grid"></div>
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+
+  <div class="hero-content">
+    <div class="hero-badge">
+      <div class="badge-dot"></div>
+      <span data-en>Available · Campinas, SP — Brazil</span>
+      <span data-pt>Disponível · Campinas, SP — Brasil</span>
     </div>
-    <!-- Other content -->
+
+    <h1 class="name">
+      <span class="name-white">Chinazaekpere</span>
+      <span class="name-grad">Akunna</span>
+    </h1>
+
+    <p class="hero-role" data-en>Product Manager <span class="role-dot">·</span> Business Development <span class="role-dot">·</span> Digital Growth</p>
+    <p class="hero-role" data-pt>Gerente de Produto <span class="role-dot">·</span> Desenvolvimento de Negócios <span class="role-dot">·</span> Crescimento Digital</p>
+
+    <p class="hero-bio" data-en>I build products that grow. With 5+ years across logistics, EdTech, and real estate, I transform user insights and market data into high-impact digital strategies — from 0 to scale.</p>
+    <p class="hero-bio" data-pt>Construo produtos que crescem. Com mais de 5 anos em logística, EdTech e imobiliário, transformo insights de usuários e dados de mercado em estratégias digitais de alto impacto — do zero à escala.</p>
+
+    <div class="stats-row">
+      <div>
+        <div class="stat-val">500%+</div>
+        <div class="stat-lbl" data-en>Traffic Growth</div>
+        <div class="stat-lbl" data-pt>Crescimento de Tráfego</div>
+      </div>
+      <div>
+        <div class="stat-val">150%</div>
+        <div class="stat-lbl" data-en>User Acquisition</div>
+        <div class="stat-lbl" data-pt>Aquisição de Usuários</div>
+      </div>
+      <div>
+        <div class="stat-val">300%</div>
+        <div class="stat-lbl" data-en>Business Growth</div>
+        <div class="stat-lbl" data-pt>Crescimento de Negócios</div>
+      </div>
+      <div>
+        <div class="stat-val">5+</div>
+        <div class="stat-lbl" data-en>Years Exp.</div>
+        <div class="stat-lbl" data-pt>Anos de Exp.</div>
+      </div>
+    </div>
+
+    <div class="cta-row">
+      <a href="#contact" class="btn-g" data-en>Get in Touch →</a>
+      <a href="#contact" class="btn-g" data-pt>Entrar em Contato →</a>
+      <a href="#experience" class="btn-o" data-en>View My Work</a>
+      <a href="#experience" class="btn-o" data-pt>Ver Meu Trabalho</a>
+    </div>
+  </div>
+
+  <div class="hero-avatar">
+  <div class="avatar-box">
+    <div class="corner tl"></div>
+    <div class="corner br"></div>
+    <img src="profile-photo.jpg" alt="Chinazaekpere Akunna" style="width:100%; height:100%; object-fit:cover; border-radius:28px; position:absolute; inset:0;"/>
+  </div>
+</div>
+</section>
+
+<!-- ═══ SKILLS ═══ -->
+<section id="skills">
+  <div class="s-label" data-en>What I Bring</div>
+  <div class="s-label" data-pt>O Que Ofereço</div>
+  <h2 class="s-title" data-en>Core <span>Skills</span></h2>
+  <h2 class="s-title" data-pt>Principais <span>Habilidades</span></h2>
+  <div class="skills-grid">
+    <div class="skill-card">
+      <div class="sk-icon">🎯</div>
+      <div class="sk-name" data-en>Product</div>
+      <div class="sk-name" data-pt>Produto</div>
+      <div class="sk-tags">
+        <span class="sk-tag">Strategy & Roadmap</span><span class="sk-tag">User Research</span>
+        <span class="sk-tag">Figma</span><span class="sk-tag">Whimsical</span>
+        <span class="sk-tag">Agile/Scrum</span><span class="sk-tag">A/B Testing</span>
+        <span class="sk-tag">KPI Definition</span><span class="sk-tag">Product Design</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="sk-icon">📈</div>
+      <div class="sk-name" data-en>Growth & Marketing</div>
+      <div class="sk-name" data-pt>Crescimento & Marketing</div>
+      <div class="sk-tags">
+        <span class="sk-tag">SEO/SEM</span><span class="sk-tag">Funnel Optimization</span>
+        <span class="sk-tag">User Acquisition</span><span class="sk-tag">Mailchimp</span>
+        <span class="sk-tag">WordPress</span><span class="sk-tag">Community Growth</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="sk-icon">🤝</div>
+      <div class="sk-name" data-en>Business Development</div>
+      <div class="sk-name" data-pt>Desenvolvimento de Negócios</div>
+      <div class="sk-tags">
+        <span class="sk-tag">Partnerships</span><span class="sk-tag">Market Analysis</span>
+        <span class="sk-tag">Stakeholder Mgmt</span><span class="sk-tag">Revenue Growth</span>
+        <span class="sk-tag">Cross-border Trade</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="sk-icon">⚙️</div>
+      <div class="sk-name" data-en>Operations & Tools</div>
+      <div class="sk-name" data-pt>Operações & Ferramentas</div>
+      <div class="sk-tags">
+        <span class="sk-tag">Jira</span><span class="sk-tag">Asana</span>
+        <span class="sk-tag">Slack</span><span class="sk-tag">Google Suite</span>
+        <span class="sk-tag">Excel</span><span class="sk-tag">Logistics & Fleet</span>
+        <span class="sk-tag">Process Design</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="sk-icon">🌍</div>
+      <div class="sk-name" data-en>Languages</div>
+      <div class="sk-name" data-pt>Idiomas</div>
+      <div class="sk-tags">
+        <span class="sk-tag" data-en>English — Fluent</span>
+        <span class="sk-tag" data-pt>Inglês — Fluente</span>
+        <span class="sk-tag" data-en>Portuguese — Advanced</span>
+        <span class="sk-tag" data-pt>Português — Avançado</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ EXPERIENCE ═══ -->
+<section id="experience">
+  <div class="s-label" data-en>Career Journey</div>
+  <div class="s-label" data-pt>Trajetória Profissional</div>
+  <h2 class="s-title" data-en>Work <span>Experience</span></h2>
+  <h2 class="s-title" data-pt><span>Experiência</span> Profissional</h2>
+  <div class="timeline">
+
+    <div class="exp-item">
+      <div class="exp-dot now"></div>
+      <div class="exp-date" data-en>July 2025 — Present</div>
+      <div class="exp-date" data-pt>Julho 2025 — Presente</div>
+      <div class="exp-role" data-en>General Manager & Head of Digital Transformation</div>
+      <div class="exp-role" data-pt>Gerente Geral & Responsável pela Transformação Digital</div>
+      <div class="exp-co">Whitray Transport & Logistics Limited · Lagos, Nigeria</div>
+      <div class="exp-txt" data-en>Leading end-to-end operations and digital transformation for a cross-border transport company on the Lagos–Accra corridor. Architecting the full digital roadmap: online booking, GPS fleet tracking, loyalty programs, and CRM infrastructure.</div>
+      <div class="exp-txt" data-pt>Liderança das operações e da transformação digital de uma empresa de logística transfronteiriça no corredor Lagos–Accra. Desenvolvimento do roadmap digital completo: reservas online, rastreamento GPS, programas de fidelidade e CRM.</div>
+      <div class="wins">
+        <span class="win" data-en>🚀 Digital Transformation Lead</span>
+        <span class="win" data-pt>🚀 Liderança de Transformação Digital</span>
+        <span class="win" data-en>Fleet Management</span>
+        <span class="win" data-pt>Gestão de Frota</span>
+        <span class="win" data-en>Cross-Border Ops</span>
+        <span class="win" data-pt>Operações Internacionais</span>
+      </div>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-dot"></div>
+      <div class="exp-date">2019 — 2024</div>
+      <div class="exp-role" data-en>Director of Operations</div>
+      <div class="exp-role" data-pt>Diretor de Operações</div>
+      <div class="exp-co">Edusphere Limited · Lagos, Nigeria</div>
+      <div class="exp-txt" data-en>Directed all operational functions for a fast-growing EdTech and study-abroad consultancy. Led the full build of Edusphereafrica.com — one of Nigeria's top study-abroad platforms — driving explosive growth through SEO, UX, and content strategy.</div>
+      <div class="exp-txt" data-pt>Gestão de todas as funções operacionais de uma consultoria EdTech em crescimento. Liderou a construção do Edusphereafrica.com — uma das principais plataformas de intercâmbio acadêmico da Nigéria — com crescimento expressivo via SEO, UX e estratégia de conteúdo.</div>
+      <div class="wins">
+        <span class="win">📊 500%+ Traffic Growth</span>
+        <span class="win">🎓 150% Enrollment Increase</span>
+        <span class="win" data-en>Full Product Build</span>
+        <span class="win" data-pt>Construção de Produto</span>
+      </div>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-dot"></div>
+      <div class="exp-date">2017 — 2019</div>
+      <div class="exp-role" data-en>Community Manager & Digital Growth Lead</div>
+      <div class="exp-role" data-pt>Gerente de Comunidade & Crescimento Digital</div>
+      <div class="exp-co">Tejuosho Property & Development Company · Lagos, Nigeria</div>
+      <div class="exp-txt" data-en>Owned digital presence and community growth for a Lagos-based real estate developer. Scaled social following from under 1K to 25K+ and drove record inbound business through multi-channel digital campaigns.</div>
+      <div class="exp-txt" data-pt>Responsável pela presença digital e crescimento de comunidade de uma incorporadora em Lagos. Escalou seguidores de menos de 1K para 25K+ e impulsionou crescimento de negócios via campanhas digitais multicanal.</div>
+      <div class="wins">
+        <span class="win">📱 1K → 25K+ Followers</span>
+        <span class="win">📍 5K+ Daily GMB Visits</span>
+        <span class="win">📈 300% Business Growth</span>
+      </div>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-dot"></div>
+      <div class="exp-date">2011</div>
+      <div class="exp-role" data-en>Engineering Intern</div>
+      <div class="exp-role" data-pt>Estagiário de Engenharia</div>
+      <div class="exp-co">Dormanlong Engineering · Lagos, Nigeria</div>
+      <div class="exp-txt" data-en>Supported material testing, quality control, and R&D initiatives. Collected experimental data and contributed to product development cycles.</div>
+      <div class="exp-txt" data-pt>Apoio em testes de materiais, controle de qualidade e P&D. Coleta de dados experimentais e contribuição para ciclos de desenvolvimento de produtos.</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ PROJECTS ═══ -->
+<section id="projects">
+  <div class="s-label" data-en>Work Highlights</div>
+  <div class="s-label" data-pt>Destaques de Trabalho</div>
+  <h2 class="s-title" data-en>Featured <span>Projects</span></h2>
+  <h2 class="s-title" data-pt>Projetos em <span>Destaque</span></h2>
+  <div class="proj-grid">
+    <div class="proj-card">
+      <div class="proj-num">01</div>
+      <div class="proj-title" data-en>Edusphereafrica.com Platform</div>
+      <div class="proj-title" data-pt>Plataforma Edusphereafrica.com</div>
+      <div class="proj-desc" data-en>Built and scaled one of Nigeria's leading study-abroad digital platforms from scratch. Drove explosive growth through product iteration, SEO strategy, and UX improvements.</div>
+      <div class="proj-desc" data-pt>Construção e escalonamento de uma das principais plataformas de intercâmbio acadêmico da Nigéria do zero, por meio de iteração de produto, SEO e melhorias de UX.</div>
+      <span class="proj-tag">📈 500%+ Traffic Growth</span>
+    </div>
+    <div class="proj-card">
+      <div class="proj-num">02</div>
+      <div class="proj-title" data-en>Student Acquisition Funnel</div>
+      <div class="proj-title" data-pt>Funil de Captação de Alunos</div>
+      <div class="proj-desc" data-en>Designed a full end-to-end acquisition and conversion funnel for Edusphere, combining digital marketing, content strategy, and CRM workflows to drive enrollment growth.</div>
+      <div class="proj-desc" data-pt>Desenvolvimento de funil completo de aquisição e conversão combinando marketing digital, estratégia de conteúdo e fluxos de CRM para impulsionar o crescimento de matrículas.</div>
+      <span class="proj-tag">🎓 150% Enrollment Growth</span>
+    </div>
+    <div class="proj-card">
+      <div class="proj-num">03</div>
+      <div class="proj-title" data-en>Whitray Digital Transformation</div>
+      <div class="proj-title" data-pt>Transformação Digital da Whitray</div>
+      <div class="proj-desc" data-en>Leading product strategy for online booking systems, GPS fleet tracking, loyalty programs, and customer support infrastructure for a cross-border logistics operation.</div>
+      <div class="proj-desc" data-pt>Liderança da estratégia de produto para reservas online, rastreamento GPS, programas de fidelidade e infraestrutura de suporte ao cliente em operação logística transfronteiriça.</div>
+      <span class="proj-tag">🚀 In Progress — 2025</span>
+    </div>
+    <div class="proj-card">
+      <div class="proj-num">04</div>
+      <div class="proj-title" data-en>Real Estate Digital Growth</div>
+      <div class="proj-title" data-pt>Crescimento Digital Imobiliário</div>
+      <div class="proj-desc" data-en>Executed multi-channel digital campaigns at Tejuosho that tripled inbound leads, scaled social following from under 1K to 25K+, and generated 5,000+ daily Google visits.</div>
+      <div class="proj-desc" data-pt>Campanhas digitais multicanal que triplicaram os leads, escalaram seguidores de menos de 1K para 25K+ e geraram mais de 5.000 visitas diárias no Google.</div>
+      <span class="proj-tag">📊 300% Business Growth</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CERTIFICATIONS & EDUCATION ═══ -->
+<section id="certifications">
+  <div class="s-label" data-en>Credentials</div>
+  <div class="s-label" data-pt>Credenciais</div>
+  <h2 class="s-title" data-en>Certifications & <span>Education</span></h2>
+  <h2 class="s-title" data-pt>Certificações & <span>Formação</span></h2>
+
+  <div class="certs-grid">
+    <div class="cert-card">
+      <div class="cert-icon">🎨</div>
+      <div>
+        <div class="cert-name" data-en>Product Design</div>
+        <div class="cert-name" data-pt>Design de Produto</div>
+        <div class="cert-issuer">Axia Africa — School of Product</div>
+        <div class="cert-date" data-en>August 2025 · ID: AX23907818</div>
+        <div class="cert-date" data-pt>Agosto 2025 · ID: AX23907818</div>
+      </div>
+    </div>
+    <div class="cert-card">
+      <div class="cert-icon">🤖</div>
+      <div>
+        <div class="cert-name" data-en>AI Augmented Professional Development</div>
+        <div class="cert-name" data-pt>Desenvolvimento Profissional com IA</div>
+        <div class="cert-issuer">ALX Africa</div>
+        <div class="cert-date">2024</div>
+      </div>
+    </div>
+    <div class="cert-card">
+      <div class="cert-icon">⚡</div>
+      <div>
+        <div class="cert-name" data-en>Fundamentals of Agile Project Management</div>
+        <div class="cert-name" data-pt>Fundamentos do Gerenciamento Ágil</div>
+        <div class="cert-issuer">Project Management Institute (PMI)</div>
+        <div class="cert-date">2024</div>
+      </div>
+    </div>
+    <div class="cert-card">
+      <div class="cert-icon">📦</div>
+      <div>
+        <div class="cert-name" data-en>Pivot to Product Management</div>
+        <div class="cert-name" data-pt>Transição para Gestão de Produto</div>
+        <div class="cert-issuer">Product Dive</div>
+        <div class="cert-date">2024</div>
+      </div>
+    </div>
+    <div class="cert-card">
+      <div class="cert-icon">🏅</div>
+      <div>
+        <div class="cert-name" data-en>Foundations of Project Management</div>
+        <div class="cert-name" data-pt>Fundamentos de Gestão de Projetos</div>
+        <div class="cert-issuer">Google</div>
+        <div class="cert-date">2022</div>
+      </div>
+    </div>
+    <div class="cert-card">
+      <div class="cert-icon">📣</div>
+      <div>
+        <div class="cert-name" data-en>Fundamentals of Digital Marketing</div>
+        <div class="cert-name" data-pt>Fundamentos do Marketing Digital</div>
+        <div class="cert-issuer">Google</div>
+        <div class="cert-date">2021</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="s-label" style="margin-top:8px;" data-en>Academic Background</div>
+  <div class="s-label" style="margin-top:8px;" data-pt>Formação Acadêmica</div>
+  <div class="edu-grid">
+    <div class="edu-card">
+      <div class="edu-yr">2021</div>
+      <div class="edu-deg" data-en>BSc, Biomedical Science</div>
+      <div class="edu-deg" data-pt>Bacharelado em Ciências Biomédicas</div>
+      <div class="edu-sch">American International School of Medicine</div>
+    </div>
+    <div class="edu-card">
+      <div class="edu-yr">2013</div>
+      <div class="edu-deg" data-en>BSc, Metallurgical & Materials Engineering</div>
+      <div class="edu-deg" data-pt>Bacharelado em Engenharia Metalúrgica</div>
+      <div class="edu-sch">University of Lagos · Nigeria</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CONTACT ═══ -->
+<section id="contact">
+  <div class="contact-inner">
+    <div class="s-label" style="justify-content:center;" data-en>Let's Connect</div>
+    <div class="s-label" style="justify-content:center;" data-pt>Vamos Conversar</div>
+    <h2 class="s-title" style="text-align:center;" data-en>Ready to <span>Work Together?</span></h2>
+    <h2 class="s-title" style="text-align:center;" data-pt>Pronto para <span>Trabalhar Juntos?</span></h2>
+    <p style="color:var(--gray);font-size:16px;line-height:1.85;max-width:520px;margin:0 auto;" data-en>Whether you need a Product Manager to scale your platform, a BD lead to open new markets, or someone to drive digital transformation — I'd love to connect.</p>
+    <p style="color:var(--gray);font-size:16px;line-height:1.85;max-width:520px;margin:0 auto;" data-pt>Se você precisa de um Gerente de Produto para escalar sua plataforma, um líder de BD para abrir novos mercados ou alguém para impulsionar a transformação digital — adoraria conversar.</p>
+    <div class="contact-links">
+      <a href="mailto:lovedayakunna@gmail.com" class="contact-link">✉️ lovedayakunna@gmail.com</a>
+      <a href="tel:+5519989867706" class="contact-link">📞 +55 19 98986 7706</a>
+      <a href="https://linkedin.com/in/lovedayakunna" target="_blank" class="contact-link">💼 LinkedIn</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>© 2025 Chinazaekpere Loveday Akunna</span>
+  <span data-en>Campinas, SP — Brazil</span>
+  <span data-pt>Campinas, SP — Brasil</span>
+</footer>
+
+<script>
+  function setLang(lang) {
+    document.body.classList.remove('en','pt');
+    document.body.classList.add(lang);
+    document.getElementById('btn-en').classList.toggle('active', lang==='en');
+    document.getElementById('btn-pt').classList.toggle('active', lang==='pt');
+  }
+
+  // Timeline scroll animation
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e,i) => {
+      if(e.isIntersecting) setTimeout(()=>e.target.classList.add('visible'), i*130);
+    });
+  }, {threshold:0.15});
+  document.querySelectorAll('.exp-item').forEach(el=>io.observe(el));
+
+  // Active nav
+  const secs = document.querySelectorAll('section[id]');
+  window.addEventListener('scroll', ()=>{
+    let cur='';
+    secs.forEach(s=>{ if(window.scrollY>=s.offsetTop-110) cur=s.id; });
+    document.querySelectorAll('nav a').forEach(a=>{
+      const active = a.getAttribute('href')==='#'+cur;
+      a.style.color = active ? 'var(--white)' : '';
+      a.style.background = active ? 'rgba(255,255,255,0.08)' : '';
+    });
+  });
+</script>
 </body>
 </html>
