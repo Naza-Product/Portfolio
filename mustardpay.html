@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>MustardPay — Fintech Prototype</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0F0F0F;
+  --surface: #1A1A1A;
+  --card: #222222;
+  --mustard: #D4A017;
+  --mustard-light: #F5C842;
+  --mustard-dark: #B8860B;
+  --text: #FFFFFF;
+  --muted: #A0A0A0;
+  --border: rgba(255,255,255,0.08);
+  --success: #22C55E;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: #111;
+  font-family: 'Inter', sans-serif;
+  color: var(--text);
+  display: flex;
+  justify-content: center;
+  padding: 20px 0;
+  min-height: 100vh;
+}
+.phone {
+  width: 390px;
+  min-height: 844px;
+  background: var(--bg);
+  border-radius: 40px;
+  border: 1px solid #333;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+}
+.status-bar {
+  height: 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 24px 0;
+  font-weight: 600;
+  font-size: 14px;
+}
+.screen { display: none; height: 100%; padding-bottom: 80px; }
+.screen.active { display: block; }
+.header {
+  padding: 12px 20px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.logo { font-weight: 800; font-size: 20px; color: var(--mustard); letter-spacing: -0.5px; }
+.balance-card {
+  margin: 0 20px 24px;
+  background: linear-gradient(135deg, var(--mustard) 0%, var(--mustard-dark) 100%);
+  border-radius: 20px;
+  padding: 24px;
+  color: #111;
+}
+.balance-label { font-size: 13px; font-weight: 500; opacity: 0.8; }
+.balance-amount { font-size: 36px; font-weight: 800; margin: 4px 0 16px; }
+.balance-actions { display: flex; gap: 12px; }
+.bal-btn {
+  flex: 1; padding: 10px; background: rgba(0,0,0,0.2); border: none; border-radius: 12px;
+  font-weight: 600; font-size: 13px; cursor: pointer; color: #111;
+}
+.section { padding: 0 20px 20px; }
+.section-title { font-weight: 700; font-size: 16px; margin-bottom: 12px; }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+.action-item {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  cursor: pointer;
+}
+.action-icon {
+  width: 56px; height: 56px; border-radius: 16px; background: var(--card);
+  display: flex; align-items: center; justify-content: center; font-size: 24px;
+  border: 1px solid var(--border);
+}
+.action-label { font-size: 11px; color: var(--muted); text-align: center; }
+.tx-list { }
+.tx-item {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 14px 0; border-bottom: 1px solid var(--border);
+}
+.tx-left { display: flex; align-items: center; gap: 12px; }
+.tx-icon { width: 40px; height: 40px; border-radius: 12px; background: var(--card); display: flex; align-items: center; justify-content: center; }
+.tx-name { font-weight: 600; font-size: 14px; }
+.tx-date { font-size: 12px; color: var(--muted); }
+.tx-amount { font-weight: 700; font-size: 14px; }
+.tx-amount.credit { color: var(--success); }
+.tx-amount.debit { color: #EF4444; }
+.bottom-nav {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 72px;
+  background: rgba(15,15,15,0.95); backdrop-filter: blur(12px);
+  border-top: 1px solid var(--border);
+  display: flex; justify-content: space-around; align-items: center; padding-bottom: 8px;
+}
+.nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 10px; color: var(--muted); cursor: pointer; }
+.nav-item.active { color: var(--mustard); }
+.nav-icon { font-size: 20px; }
+.btn-primary {
+  width: 100%; height: 52px; background: var(--mustard); border: none; border-radius: 12px;
+  color: #111; font-weight: 700; font-size: 16px; cursor: pointer; margin-top: 16px;
+}
+.input {
+  width: 100%; padding: 14px 16px; background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; color: white; font-size: 15px; margin-bottom: 12px;
+}
+.contact {
+  display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); cursor: pointer;
+}
+.contact-avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--mustard); color: #111; display: flex; align-items: center; justify-content: center; font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="phone">
+  <div class="status-bar"><span>9:41</span><span>📶 🔋</span></div>
+
+  <!-- Home -->
+  <div class="screen active" id="home">
+    <div class="header">
+      <div class="logo">MustardPay</div>
+      <div style="font-size:20px; cursor:pointer;" onclick="go('profile')">👤</div>
+    </div>
+    <div class="balance-card">
+      <div class="balance-label">Wallet Balance</div>
+      <div class="balance-amount">₦ 124,580.00</div>
+      <div class="balance-actions">
+        <button class="bal-btn" onclick="go('addmoney')">+ Add Money</button>
+        <button class="bal-btn" onclick="go('transfer')">Transfer</button>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Quick Actions</div>
+      <div class="grid">
+        <div class="action-item" onclick="go('transfer')"><div class="action-icon">↗️</div><div class="action-label">Transfer</div></div>
+        <div class="action-item" onclick="go('bills')"><div class="action-icon">💡</div><div class="action-label">Bills</div></div>
+        <div class="action-item" onclick="go('airtime')"><div class="action-icon">📱</div><div class="action-label">Airtime</div></div>
+        <div class="action-item" onclick="go('scan')"><div class="action-icon">📷</div><div class="action-label">Scan</div></div>
+        <div class="action-item" onclick="go('cards')"><div class="action-icon">💳</div><div class="action-label">Cards</div></div>
+        <div class="action-item" onclick="go('savings')"><div class="action-icon">🏦</div><div class="action-label">Savings</div></div>
+        <div class="action-item" onclick="go('loans')"><div class="action-icon">💰</div><div class="action-label">Loans</div></div>
+        <div class="action-item" onclick="go('more')"><div class="action-icon">•••</div><div class="action-label">More</div></div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Recent Transactions</div>
+      <div class="tx-list">
+        <div class="tx-item">
+          <div class="tx-left"><div class="tx-icon">↗️</div><div><div class="tx-name">Transfer to Ada</div><div class="tx-date">Today, 2:14 PM</div></div></div>
+          <div class="tx-amount debit">- ₦5,000</div>
+        </div>
+        <div class="tx-item">
+          <div class="tx-left"><div class="tx-icon">💡</div><div><div class="tx-name">PHCN Bill</div><div class="tx-date">Yesterday</div></div></div>
+          <div class="tx-amount debit">- ₦12,400</div>
+        </div>
+        <div class="tx-item">
+          <div class="tx-left"><div class="tx-icon">📥</div><div><div class="tx-name">From Chidi</div><div class="tx-date">2 days ago</div></div></div>
+          <div class="tx-amount credit">+ ₦25,000</div>
+        </div>
+      </div>
+    </div>
+    <div class="bottom-nav">
+      <div class="nav-item active" onclick="go('home')"><div class="nav-icon">🏠</div>Home</div>
+      <div class="nav-item" onclick="go('transfer')"><div class="nav-icon">↗️</div>Transfer</div>
+      <div class="nav-item" onclick="go('bills')"><div class="nav-icon">💡</div>Bills</div>
+      <div class="nav-item" onclick="go('profile')"><div class="nav-icon">👤</div>Profile</div>
+    </div>
+  </div>
+
+  <!-- Transfer -->
+  <div class="screen" id="transfer">
+    <div class="header"><button class="back" style="background:none;border:none;color:white;font-size:20px;" onclick="go('home')">‹</button><div class="logo">Transfer</div><div></div></div>
+    <div style="padding:20px;">
+      <div class="section-title">Send Money</div>
+      <input class="input" placeholder="Account number or phone">
+      <div class="contact" onclick="fillAmount()">
+        <div class="contact-avatar">A</div>
+        <div><div style="font-weight:600;">Ada Okafor</div><div style="font-size:12px;color:var(--muted);">GTBank • 0123456789</div></div>
+      </div>
+      <div class="contact" onclick="fillAmount()">
+        <div class="contact-avatar">C</div>
+        <div><div style="font-weight:600;">Chidi Eze</div><div style="font-size:12px;color:var(--muted);">Access • 0987654321</div></div>
+      </div>
+      <input class="input" id="amount" placeholder="Amount (₦)" style="margin-top:20px;">
+      <button class="btn-primary" onclick="go('success')">Send Money</button>
+    </div>
+    <div class="bottom-nav">
+      <div class="nav-item" onclick="go('home')"><div class="nav-icon">🏠</div>Home</div>
+      <div class="nav-item active" onclick="go('transfer')"><div class="nav-icon">↗️</div>Transfer</div>
+      <div class="nav-item" onclick="go('bills')"><div class="nav-icon">💡</div>Bills</div>
+      <div class="nav-item" onclick="go('profile')"><div class="nav-icon">👤</div>Profile</div>
+    </div>
+  </div>
+
+  <!-- Bills -->
+  <div class="screen" id="bills">
+    <div class="header"><button style="background:none;border:none;color:white;font-size:20px;" onclick="go('home')">‹</button><div class="logo">Pay Bills</div><div></div></div>
+    <div style="padding:20px;">
+      <div class="grid" style="grid-template-columns:repeat(3,1fr);">
+        <div class="action-item"><div class="action-icon">⚡</div><div class="action-label">Electricity</div></div>
+        <div class="action-item"><div class="action-icon">📡</div><div class="action-label">Internet</div></div>
+        <div class="action-item"><div class="action-icon">📺</div><div class="action-label">Cable TV</div></div>
+        <div class="action-item"><div class="action-icon">💧</div><div class="action-label">Water</div></div>
+        <div class="action-item"><div class="action-icon">🏫</div><div class="action-label">School</div></div>
+        <div class="action-item"><div class="action-icon">🏥</div><div class="action-label">Health</div></div>
+      </div>
+    </div>
+    <div class="bottom-nav">
+      <div class="nav-item" onclick="go('home')"><div class="nav-icon">🏠</div>Home</div>
+      <div class="nav-item" onclick="go('transfer')"><div class="nav-icon">↗️</div>Transfer</div>
+      <div class="nav-item active" onclick="go('bills')"><div class="nav-icon">💡</div>Bills</div>
+      <div class="nav-item" onclick="go('profile')"><div class="nav-icon">👤</div>Profile</div>
+    </div>
+  </div>
+
+  <!-- Success -->
+  <div class="screen" id="success">
+    <div style="text-align:center; padding:80px 20px;">
+      <div style="font-size:64px; margin-bottom:16px;">✅</div>
+      <div style="font-size:24px; font-weight:800; margin-bottom:8px;">Transfer Successful</div>
+      <div style="color:var(--muted); margin-bottom:32px;">₦5,000 sent to Ada Okafor</div>
+      <button class="btn-primary" onclick="go('home')">Done</button>
+    </div>
+  </div>
+
+  <!-- Profile -->
+  <div class="screen" id="profile">
+    <div class="header"><div class="logo">Profile</div><div></div></div>
+    <div style="text-align:center; padding:24px 0;">
+      <div style="width:80px;height:80px;border-radius:50%;background:var(--mustard);color:#111;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:700;">C</div>
+      <div style="font-weight:700;font-size:18px;">Chinazaekpere</div>
+      <div style="color:var(--muted);font-size:13px;">+234 801 234 5678</div>
+    </div>
+    <div style="padding:0 20px;">
+      <div class="tx-item"><div>Account Number</div><div>0123456789</div></div>
+      <div class="tx-item"><div>Bank</div><div>MustardPay</div></div>
+      <div class="tx-item"><div>KYC Status</div><div style="color:var(--success);">Verified</div></div>
+    </div>
+    <div class="bottom-nav">
+      <div class="nav-item" onclick="go('home')"><div class="nav-icon">🏠</div>Home</div>
+      <div class="nav-item" onclick="go('transfer')"><div class="nav-icon">↗️</div>Transfer</div>
+      <div class="nav-item" onclick="go('bills')"><div class="nav-icon">💡</div>Bills</div>
+      <div class="nav-item active" onclick="go('profile')"><div class="nav-icon">👤</div>Profile</div>
+    </div>
+  </div>
+</div>
+
+<script>
+function go(screen) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(screen).classList.add('active');
+}
+function fillAmount() {
+  document.getElementById('amount').value = '5000';
+}
+</script>
+</body>
+</html>
