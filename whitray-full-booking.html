@@ -368,7 +368,7 @@ body {
       <div class="vehicle-grid" id="vehicles"></div>
     </div>
     <div class="bottom-bar">
-      <button class="btn-primary" id="continue1" onclick="goToStep(2)" disabled>Continue →</button>
+      <button class="btn-primary" id="continue1" onclick="goToStep(2)" disabled>Continue ›</button>
     </div>
   </div>
 
@@ -383,7 +383,7 @@ body {
       <div class="progress-label">Step 2 of 5</div>
     </div>
     <div class="content">
-      <div class="heading" id="routeTitle">Lagos → Accra</div>
+      <div class="heading" id="routeTitle">Lagos › Accra</div>
       <div class="sub" id="routeSub">Select departure date</div>
 
       <div class="label">Travel Date</div>
@@ -437,7 +437,7 @@ body {
       </div>
     </div>
     <div class="bottom-bar">
-      <button class="btn-primary" id="continue2" onclick="goToStep(3)" disabled>Continue →</button>
+      <button class="btn-primary" id="continue2" onclick="goToStep(3)" disabled>Continue ›</button>
     </div>
   </div>
 
@@ -470,7 +470,7 @@ body {
       <div class="seat-grid" id="seats"></div>
     </div>
     <div class="bottom-bar">
-      <button class="btn-primary" onclick="goToStep(4)">Continue to Payment →</button>
+      <button class="btn-primary" onclick="goToStep(4)">Continue to Payment ›</button>
     </div>
   </div>
 
@@ -507,7 +507,7 @@ body {
       </div>
     </div>
     <div class="bottom-bar">
-      <button class="btn-primary" onclick="goToStep(5)">Pay Now →</button>
+      <button class="btn-primary" onclick="goToStep(5)">Pay Now ›</button>
     </div>
   </div>
 
@@ -518,11 +518,11 @@ body {
     </div>
     <div class="content" style="padding-top:40px;">
       <div class="confirm-card">
-        <div class="confirm-icon">✅</div>
+        <div class="confirm-icon">✓</div>
         <div class="heading">Booking confirmed!</div>
         <div class="sub" style="margin-bottom:16px;">Reference: WR-48291</div>
         <div class="price-box">
-          <div class="price-row"><span>Route</span><span id="confRoute">Lagos → Accra</span></div>
+          <div class="price-row"><span>Route</span><span id="confRoute">Lagos › Accra</span></div>
           <div class="price-row"><span>Date</span><span id="confDate">7 March 2026 · 09:00 AM</span></div>
           <div class="price-row"><span>Vehicle</span><span id="confVehicle">Standard Coach</span></div>
           <div class="price-row total"><span>Paid</span><span id="confTotal">₦90,000</span></div>
@@ -573,7 +573,7 @@ function renderRoutes() {
   routes.forEach((r, i) => {
     const c = document.createElement('div');
     c.className = 'route-card';
-    c.innerHTML = `<div><div class="card-title">${r.from} → ${r.to}</div><div class="card-sub">${r.duration}</div></div><div class="price-tag">₦${r.price.toLocaleString()}</div>`;
+    c.innerHTML = `<div><div class="card-title">${r.from} › ${r.to}</div><div class="card-sub">${r.duration}</div></div><div class="price-tag">₦${r.price.toLocaleString()}</div>`;
     c.onclick = () => selectRoute(r, c);
     el.appendChild(c);
   });
@@ -614,7 +614,7 @@ function updateContinue1() {
 
 function updateRouteDisplay() {
   if (selectedRoute) {
-    document.getElementById('routeTitle').textContent = `${selectedRoute.from} → ${selectedRoute.to}`;
+    document.getElementById('routeTitle').textContent = `${selectedRoute.from} › ${selectedRoute.to}`;
     document.getElementById('routeSub').textContent = tripType === 'return' ? 'Select departure & return dates' : 'Select your departure date';
   }
 }
@@ -691,7 +691,7 @@ function goToStep(step) {
   if (step === 2) { updateRouteDisplay(); renderCalendar(); renderSlots(); updatePrice(); }
   if (step === 3) renderSeats();
   if (step === 5) {
-    document.getElementById('confRoute').textContent = selectedRoute ? `${selectedRoute.from} → ${selectedRoute.to}` : 'Lagos → Accra';
+    document.getElementById('confRoute').textContent = selectedRoute ? `${selectedRoute.from} › ${selectedRoute.to}` : 'Lagos › Accra';
     document.getElementById('confVehicle').textContent = selectedVehicle ? selectedVehicle.name : 'Standard';
   }
 }
