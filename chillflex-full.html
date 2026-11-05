@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>ChillFlex — Full Interactive Prototype</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0A0A0A;
+  --surface: #141414;
+  --card: #1C1C1C;
+  --accent: #E50914;
+  --accent-hover: #F40612;
+  --text: #FFFFFF;
+  --muted: #B3B3B3;
+  --border: rgba(255,255,255,0.08);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: #111;
+  font-family: 'Inter', sans-serif;
+  color: var(--text);
+  display: flex;
+  justify-content: center;
+  padding: 20px 0;
+  min-height: 100vh;
+}
+.phone {
+  width: 390px;
+  min-height: 844px;
+  background: var(--bg);
+  border-radius: 40px;
+  border: 1px solid #222;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+}
+.status-bar {
+  height: 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 24px 0;
+  font-weight: 600;
+  font-size: 14px;
+}
+.screen { display: none; height: 100%; }
+.screen.active { display: block; }
+.header {
+  padding: 12px 20px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.logo { font-weight: 800; font-size: 22px; letter-spacing: -0.5px; color: var(--accent); }
+.back { background: none; border: none; color: white; font-size: 20px; cursor: pointer; }
+.btn-primary {
+  width: 100%;
+  height: 52px;
+  background: var(--accent);
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 16px;
+}
+.btn-primary:hover { background: var(--accent-hover); }
+.input {
+  width: 100%;
+  padding: 14px 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: white;
+  font-size: 15px;
+  margin-bottom: 12px;
+}
+.hero {
+  margin: 0 20px 24px;
+  height: 200px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #E50914 0%, #831010 100%);
+  display: flex;
+  align-items: flex-end;
+  padding: 16px;
+}
+.section { padding: 0 20px 20px; }
+.section-title { font-weight: 700; font-size: 16px; margin-bottom: 12px; }
+.row { display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none; padding-bottom: 4px; }
+.row::-webkit-scrollbar { display: none; }
+.poster {
+  width: 110px; height: 160px; border-radius: 12px; background: var(--card);
+  flex-shrink: 0; position: relative; overflow: hidden; cursor: pointer;
+}
+.poster-img { width: 100%; height: 100%; background: linear-gradient(45deg, #2a2a2a, #1a1a1a); }
+.poster-label {
+  position: absolute; bottom: 0; left: 0; right: 0; padding: 8px;
+  background: linear-gradient(transparent, rgba(0,0,0,0.8)); font-size: 11px; font-weight: 600;
+}
+.bottom-nav {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 72px;
+  background: rgba(10,10,10,0.95); backdrop-filter: blur(12px);
+  border-top: 1px solid var(--border);
+  display: flex; justify-content: space-around; align-items: center; padding-bottom: 8px;
+}
+.nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 10px; color: var(--muted); cursor: pointer; }
+.nav-item.active { color: var(--text); }
+.nav-icon { font-size: 20px; }
+.onboarding-content { padding: 40px 24px; text-align: center; }
+.onboarding-logo { font-size: 48px; margin: 40px 0 20px; }
+.onboarding-title { font-size: 28px; font-weight: 800; margin-bottom: 12px; }
+.onboarding-sub { color: var(--muted); margin-bottom: 40px; line-height: 1.5; }
+.video-player {
+  height: 220px; background: #000; margin: 0 0 16px;
+  display: flex; align-items: center; justify-content: center; font-size: 48px;
+}
+.profile-header { text-align: center; padding: 24px 0; }
+.avatar { width: 80px; height: 80px; border-radius: 50%; background: var(--card); margin: 0 auto 12px; display: flex; align-items: center; justify-content: center; font-size: 32px; }
+.menu-item { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+</style>
+</head>
+<body>
+<div class="phone">
+  <div class="status-bar"><span>9:41</span><span>📶 🔋</span></div>
+
+  <!-- Onboarding -->
+  <div class="screen active" id="onboarding">
+    <div class="onboarding-content">
+      <div class="onboarding-logo">🎬</div>
+      <div class="onboarding-title">Welcome to ChillFlex</div>
+      <div class="onboarding-sub">Stream unlimited movies and series. Watch anywhere, anytime.</div>
+      <button class="btn-primary" onclick="go('signup')">Get Started</button>
+      <button class="btn-primary" style="background:transparent; border:1px solid var(--border);" onclick="go('home')">Skip for now</button>
+    </div>
+  </div>
+
+  <!-- Sign up -->
+  <div class="screen" id="signup">
+    <div class="header"><button class="back" onclick="go('onboarding')">‹</button><div class="logo">CHILLFLEX</div><div></div></div>
+    <div style="padding:20px;">
+      <div style="font-size:24px; font-weight:800; margin-bottom:8px;">Create Account</div>
+      <div style="color:var(--muted); margin-bottom:24px;">Join millions of viewers</div>
+      <input class="input" placeholder="Username">
+      <input class="input" placeholder="Email">
+      <input class="input" placeholder="Phone">
+      <input class="input" type="password" placeholder="Password">
+      <button class="btn-primary" onclick="go('home')">Create Account</button>
+      <div style="text-align:center; margin-top:16px; color:var(--muted); font-size:13px;">Already have an account? <span style="color:var(--accent); cursor:pointer;" onclick="go('home')">Sign in</span></div>
+    </div>
+  </div>
+
+  <!-- Home -->
+  <div class="screen" id="home">
+    <div class="header"><div class="logo">CHILLFLEX</div><button class="search-btn" onclick="go('explore')">🔍</button></div>
+    <div class="hero"><div><div style="font-weight:700;font-size:18px;">Featured Tonight</div><div style="font-size:13px;opacity:0.85;">New releases & trending</div></div></div>
+    <div class="section">
+      <div class="section-title">Top Picks for You</div>
+      <div class="row">
+        <div class="poster" onclick="go('video')"><div class="poster-img"></div><div class="poster-label">Action</div></div>
+        <div class="poster" onclick="go('video')"><div class="poster-img"></div><div class="poster-label">Thriller</div></div>
+        <div class="poster" onclick="go('video')"><div class="poster-img"></div><div class="poster-label">Drama</div></div>
+        <div class="poster" onclick="go('video')"><div class="poster-img"></div><div class="poster-label">Comedy</div></div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Trending Now</div>
+      <div class="row">
+        <div class="poster" onclick="go('video')"><div class="poster-img"></div><div class="poster-label">#1</div></div>
+        <div class="poster" onclick="go('video')"><div class="poster-img"></div><div class="poster-label">#2</div></div>
+        <div class="poster" onclick="go('video')"><div class="poster-img"></div><div class="poster-label">#3</div></div>
+      </div>
+    </div>
+    <div class="bottom-nav">
+      <div class="nav-item active" onclick="go('home')"><div class="nav-icon">🏠</div>Home</div>
+      <div class="nav-item" onclick="go('explore')"><div class="nav-icon">🔍</div>Explore</div>
+      <div class="nav-item"><div class="nav-icon">⬇️</div>Downloads</div>
+      <div class="nav-item" onclick="go('profile')"><div class="nav-icon">👤</div>Profile</div>
+    </div>
+  </div>
+
+  <!-- Explore -->
+  <div class="screen" id="explore">
+    <div class="header"><button class="back" onclick="go('home')">‹</button><div class="logo">Explore</div><div></div></div>
+    <div style="padding:0 20px 20px;">
+      <input class="input" placeholder="Search titles, genres...">
+      <div class="section-title">Top Recommendations</div>
+      <div class="poster" style="width:100%; height:140px; margin-bottom:12px;" onclick="go('video')"><div class="poster-img"></div><div class="poster-label">Thriller · 2022 · 2h</div></div>
+      <div class="poster" style="width:100%; height:140px; margin-bottom:12px;" onclick="go('video')"><div class="poster-img"></div><div class="poster-label">Action · 2025 · 1h 30m</div></div>
+      <div class="poster" style="width:100%; height:140px;" onclick="go('video')"><div class="poster-img"></div><div class="poster-label">Romance · 2024</div></div>
+    </div>
+    <div class="bottom-nav">
+      <div class="nav-item" onclick="go('home')"><div class="nav-icon">🏠</div>Home</div>
+      <div class="nav-item active" onclick="go('explore')"><div class="nav-icon">🔍</div>Explore</div>
+      <div class="nav-item"><div class="nav-icon">⬇️</div>Downloads</div>
+      <div class="nav-item" onclick="go('profile')"><div class="nav-icon">👤</div>Profile</div>
+    </div>
+  </div>
+
+  <!-- Video Playback -->
+  <div class="screen" id="video">
+    <div class="header"><button class="back" onclick="go('home')">‹</button><div class="logo">Playing</div><div></div></div>
+    <div class="video-player">▶</div>
+    <div style="padding:0 20px;">
+      <div style="font-size:20px; font-weight:700; margin-bottom:4px;">Video Title</div>
+      <div style="color:var(--muted); font-size:13px; margin-bottom:16px;">Thriller · 2022 · 2h 05m</div>
+      <button class="btn-primary">Play Episode</button>
+      <div style="margin-top:20px; font-size:14px; line-height:1.5; color:var(--muted);">A gripping story of suspense and unexpected twists that will keep you on the edge of your seat.</div>
+      <div class="section-title" style="margin-top:24px;">Similar Titles</div>
+      <div class="row">
+        <div class="poster"><div class="poster-img"></div></div>
+        <div class="poster"><div class="poster-img"></div></div>
+        <div class="poster"><div class="poster-img"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Profile -->
+  <div class="screen" id="profile">
+    <div class="header"><div class="logo">Profile</div><div></div></div>
+    <div class="profile-header">
+      <div class="avatar">👤</div>
+      <div style="font-weight:700; font-size:18px;">Chinazaekpere</div>
+      <div style="color:var(--muted); font-size:13px;">Premium Member</div>
+    </div>
+    <div class="menu-item" onclick="alert('Edit Profile')">Edit Profile <span>›</span></div>
+    <div class="menu-item">My Watchlist <span>›</span></div>
+    <div class="menu-item">Recently Watched <span>›</span></div>
+    <div class="menu-item">Downloads <span>›</span></div>
+    <div class="menu-item">Settings <span>›</span></div>
+    <div class="menu-item">Payment & Subscription <span>›</span></div>
+    <div class="menu-item">Help & Support <span>›</span></div>
+    <div class="menu-item" style="color:var(--accent);" onclick="go('onboarding')">Log Out</div>
+    <div class="bottom-nav">
+      <div class="nav-item" onclick="go('home')"><div class="nav-icon">🏠</div>Home</div>
+      <div class="nav-item" onclick="go('explore')"><div class="nav-icon">🔍</div>Explore</div>
+      <div class="nav-item"><div class="nav-icon">⬇️</div>Downloads</div>
+      <div class="nav-item active" onclick="go('profile')"><div class="nav-icon">👤</div>Profile</div>
+    </div>
+  </div>
+</div>
+
+<script>
+function go(screen) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(screen).classList.add('active');
+}
+</script>
+</body>
+</html>
